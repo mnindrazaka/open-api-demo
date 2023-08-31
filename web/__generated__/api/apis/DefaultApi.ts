@@ -15,12 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
-  ListProduct200Response,
+  Product,
+  ProductBody,
+  ProductsGet200Response,
 } from '../models/index';
 import {
-    ListProduct200ResponseFromJSON,
-    ListProduct200ResponseToJSON,
+    ProductFromJSON,
+    ProductToJSON,
+    ProductBodyFromJSON,
+    ProductBodyToJSON,
+    ProductsGet200ResponseFromJSON,
+    ProductsGet200ResponseToJSON,
 } from '../models/index';
+
+export interface ProductsAddPostRequest {
+    productBody: ProductBody;
+}
 
 /**
  * 
@@ -28,9 +38,42 @@ import {
 export class DefaultApi extends runtime.BaseAPI {
 
     /**
+     * Create a new product
+     */
+    async productsAddPostRaw(requestParameters: ProductsAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Product>> {
+        if (requestParameters.productBody === null || requestParameters.productBody === undefined) {
+            throw new runtime.RequiredError('productBody','Required parameter requestParameters.productBody was null or undefined when calling productsAddPost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/products/add`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ProductBodyToJSON(requestParameters.productBody),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a new product
+     */
+    async productsAddPost(requestParameters: ProductsAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
+        const response = await this.productsAddPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get a list of products
      */
-    async listProductRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListProduct200Response>> {
+    async productsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProductsGet200Response>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -42,14 +85,14 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListProduct200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProductsGet200ResponseFromJSON(jsonValue));
     }
 
     /**
      * Get a list of products
      */
-    async listProduct(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListProduct200Response> {
-        const response = await this.listProductRaw(initOverrides);
+    async productsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProductsGet200Response> {
+        const response = await this.productsGetRaw(initOverrides);
         return await response.value();
     }
 

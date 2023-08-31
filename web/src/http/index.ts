@@ -1,9 +1,5 @@
-import { UsersApi, Configuration } from "../../__generated__/api";
+import { DefaultApi, Configuration } from "../../__generated__/api";
 
-export const userApi = new UsersApi(
+export const api = new DefaultApi(
   new Configuration({ basePath: "https://dummyjson.com" })
 );
-
-userApi.listUsersAdmin;
-
-userApi.listUsersInternal;

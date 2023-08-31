@@ -2,26 +2,10 @@ openapi: 3.0.0
 info:
   title: Sample Product API
   version: 1.0.0
-servers:
-  - url: https://dummyjson.com
 paths:
-  /v1/internal/events:
-    get:
-      operationId: listEventsInternal
-      tags: ["Event"]
-  /v1/admins/events:
-    get:
-      operationId: listEventsAdmin
-      tags: ["Event"]
-  /v1/employer/events:
-    get:
-      operationId: listEventsEmployer
-      tags: ["Event"]
   /products:
     get:
-      operationId: listProduct
       summary: Get a list of products
-      tags: ["Product"]
       responses:
         "200":
           description: Successful response
@@ -45,6 +29,23 @@ paths:
                   - total
                   - skip
                   - limit
+  /products/add:
+    post:
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBody"
+      responses:
+        "201":
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
 components:
   schemas:
     Product:
@@ -76,6 +77,36 @@ components:
             type: string
       required:
         - id
+        - title
+        - price
+        - stock
+        - brand
+        - category
+
+    ProductBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        discountPercentage:
+          type: number
+        stock:
+          type: integer
+        brand:
+          type: string
+        category:
+          type: string
+        thumbnail:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+      required:
         - title
         - price
         - stock
