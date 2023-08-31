@@ -12,10 +12,12 @@ export default function Home() {
 
   return (
     <div>
-      <Link href="/new">Create New</Link>
+      <Link href="/products/new">Create New</Link>
       <ol>
         {products.map(({ id, title }) => (
-          <li key={id}>{title}</li>
+          <li key={id}>
+            <Link href={`/products/${id}`}>{title}</Link>
+          </li>
         ))}
       </ol>
     </div>

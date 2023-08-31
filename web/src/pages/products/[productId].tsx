@@ -1,4 +1,4 @@
-import { ProductBody } from "../../__generated__/api";
+import { ProductBody } from "../../../__generated__/api";
 import React from "react";
 import { api } from "@/http";
 import Link from "next/link";
@@ -18,13 +18,31 @@ export default function Home() {
   });
 
   const router = useRouter();
+  const productIdQuery = Array.isArray(router.query.productId)
+    ? router.query.productId[0]
+    : router.query.productId;
+
+  React.useEffect(() => {
+    if (productIdQuery)
+      api
+        .productsProductIdGet({ productId: parseInt(productIdQuery) })
+        .then(setProductForm);
+  }, [productIdQuery]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    api.productsAddPost({ productBody: productForm }).then(() => {
-      alert("success");
-      router.push("/");
-    });
+
+    if (productIdQuery) {
+      api
+        .productsProductIdPut({
+          productBody: productForm,
+          productId: parseInt(productIdQuery),
+        })
+        .then(() => {
+          alert("success");
+          router.push("/");
+        });
+    }
   };
 
   return (

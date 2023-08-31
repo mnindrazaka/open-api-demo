@@ -32,6 +32,15 @@ export interface ProductsAddPostRequest {
     productBody: ProductBody;
 }
 
+export interface ProductsProductIdGetRequest {
+    productId: number;
+}
+
+export interface ProductsProductIdPutRequest {
+    productId: number;
+    productBody: ProductBody;
+}
+
 /**
  * 
  */
@@ -93,6 +102,73 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async productsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProductsGet200Response> {
         const response = await this.productsGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get product details by ID
+     */
+    async productsProductIdGetRaw(requestParameters: ProductsProductIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Product>> {
+        if (requestParameters.productId === null || requestParameters.productId === undefined) {
+            throw new runtime.RequiredError('productId','Required parameter requestParameters.productId was null or undefined when calling productsProductIdGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/products/{productId}`.replace(`{${"productId"}}`, encodeURIComponent(String(requestParameters.productId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));
+    }
+
+    /**
+     * Get product details by ID
+     */
+    async productsProductIdGet(requestParameters: ProductsProductIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
+        const response = await this.productsProductIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update product details by ID
+     */
+    async productsProductIdPutRaw(requestParameters: ProductsProductIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Product>> {
+        if (requestParameters.productId === null || requestParameters.productId === undefined) {
+            throw new runtime.RequiredError('productId','Required parameter requestParameters.productId was null or undefined when calling productsProductIdPut.');
+        }
+
+        if (requestParameters.productBody === null || requestParameters.productBody === undefined) {
+            throw new runtime.RequiredError('productBody','Required parameter requestParameters.productBody was null or undefined when calling productsProductIdPut.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/products/{productId}`.replace(`{${"productId"}}`, encodeURIComponent(String(requestParameters.productId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ProductBodyToJSON(requestParameters.productBody),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));
+    }
+
+    /**
+     * Update product details by ID
+     */
+    async productsProductIdPut(requestParameters: ProductsProductIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
+        const response = await this.productsProductIdPutRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
