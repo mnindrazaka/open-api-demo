@@ -6,32 +6,19 @@ paths:
   /products:
     get:
       summary: Get a list of products
+      tags: [Product]
       responses:
         "200":
           description: Successful response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  products:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Product"
-                  total:
-                    type: integer
-                  skip:
-                    type: integer
-                  limit:
-                    type: integer
-                required:
-                  - products
-                  - total
-                  - skip
-                  - limit
+                $ref: "#/components/schemas/ProductGetResponse"
+
   /products/{productId}:
     get:
       summary: Get product details by ID
+      tags: [Product]
       parameters:
         - name: productId
           in: path
@@ -71,6 +58,7 @@ paths:
   /products/add:
     post:
       summary: Create a new product
+      tags: [Product]
       requestBody:
         required: true
         content:
@@ -84,9 +72,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
+  /pets:
+    patch:
+      tags: [Pet]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/Cat"
+                - $ref: "#/components/schemas/Dog"
+      responses:
+        "200":
+          description: Updated
 
 components:
   schemas:
+    ProductGetResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        total:
+          type: integer
+        skip:
+          type: integer
+        limit:
+          type: integer
+      required:
+        - products
+        - total
+        - skip
+        - limit]
     Product:
       type: object
       properties:
@@ -94,6 +113,7 @@ components:
           type: integer
         title:
           type: string
+          x-go-custom-tag: required
         description:
           type: string
         price:
@@ -108,6 +128,9 @@ components:
           type: string
         category:
           type: string
+          enum:
+            - smartphones
+            - laptops
         thumbnail:
           type: string
         images:
@@ -139,6 +162,9 @@ components:
           type: string
         category:
           type: string
+          enum:
+            - smartphones
+            - laptops
         thumbnail:
           type: string
         images:
@@ -151,3 +177,20 @@ components:
         - stock
         - brand
         - category
+    Cat:
+      type: object
+      properties:
+        hunts:
+          type: boolean
+        age:
+          type: integer
+    Dog:
+      type: object
+      properties:
+        bark:
+          type: boolean
+        breed:
+          $ref: "#/components/schemas/DogBreed"
+    DogBreed:
+      type: string
+      enum: [Dingo, Husky, Retriever, Shepherd]

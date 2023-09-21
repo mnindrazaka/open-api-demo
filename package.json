@@ -1,0 +1,14 @@
+{
+  "name": "open-api-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "generate:ts": "npx @openapitools/openapi-generator-cli generate -i api.yaml -g typescript-fetch -o __generated__/api-ts",
+    "generate:go": "npx @openapitools/openapi-generator-cli generate -i api.yaml -g go -o __generated__/api-go",
+    "generate:php": "npx @openapitools/openapi-generator-cli generate -i api.yaml -g php -o __generated__/api-php"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0"
+  }
+}
